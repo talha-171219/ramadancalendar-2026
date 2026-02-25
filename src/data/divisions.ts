@@ -13,15 +13,15 @@ export const divisions: Division[] = [
   {
     name: "রাজশাহী বিভাগ",
     districts: [
-      { name: "রাজশাহী", dataKey: "rajshahi", available: false },
+      { name: "রাজশাহী", dataKey: "rajshahi", available: true },
       { name: "বগুড়া", dataKey: "bogura", available: true },
-      { name: "চাঁপাইনবাবগঞ্জ", dataKey: "chapainawabganj", available: false },
-      { name: "নওগাঁ", dataKey: "naogaon", available: false },
-      { name: "নাটোর", dataKey: "natore", available: false },
+      { name: "চাঁপাইনবাবগঞ্জ", dataKey: "chapainawabganj", available: true },
+      { name: "নওগাঁ", dataKey: "naogaon", available: true },
+      { name: "নাটোর", dataKey: "natore", available: true },
       { name: "নবাবগঞ্জ", dataKey: "nawabganj", available: false },
-      { name: "পাবনা", dataKey: "pabna", available: false },
-      { name: "সিরাজগঞ্জ", dataKey: "sirajganj", available: false },
-      { name: "জয়পুরহাট", dataKey: "joypurhat", available: false },
+      { name: "পাবনা", dataKey: "pabna", available: true },
+      { name: "সিরাজগঞ্জ", dataKey: "sirajganj", available: true },
+      { name: "জয়পুরহাট", dataKey: "joypurhat", available: true },
     ],
   },
   {
