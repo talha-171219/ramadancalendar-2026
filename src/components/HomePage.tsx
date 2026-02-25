@@ -45,15 +45,15 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
   const todayRamadan = todayRow?.ramadan || null;
 
   // Countdown timer logic
-  const parseTime = useCallback((timeStr: string): Date | null => {
+  const parseTime = useCallback((timeStr: string, isPM: boolean = false): Date | null => {
     if (!timeStr) return null;
-    // Convert Bengali digits to ASCII
     const ascii = timeStr.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
     const match = ascii.match(/(\d+)[.:](\d+)/);
     if (!match) return null;
+    let hours = parseInt(match[1]);
+    if (isPM && hours < 12) hours += 12;
     const now = new Date();
-    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(match[1]), parseInt(match[2]), 0);
-    return target;
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, parseInt(match[2]), 0);
   }, []);
 
   const [now, setNow] = useState(new Date());
@@ -65,8 +65,8 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
 
   const countdowns = useMemo(() => {
     if (!todayRow) return null;
-    const sehriTarget = parseTime(todayRow.sehriEnd);
-    const iftarTarget = parseTime(todayRow.iftarTime);
+    const sehriTarget = parseTime(todayRow.sehriEnd, false);
+    const iftarTarget = parseTime(todayRow.iftarTime, true);
     
     const getCountdown = (target: Date | null) => {
       if (!target) return null;
