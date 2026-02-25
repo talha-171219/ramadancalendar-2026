@@ -33,14 +33,20 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
     return null;
   }, [selectedDistrict]);
 
-  // Get today's row from selected district calendar
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Get today's row from selected district calendar (uses `now` so it auto-updates at midnight)
   const todayRow = useMemo(() => {
     if (!selectedDistrict || !calendarMap[selectedDistrict]) return null;
     const cal = calendarMap[selectedDistrict];
-    const d = new Date();
-    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     return cal.rows.find((r: any) => r.gregorianDate === today) || null;
-  }, [selectedDistrict, calendarMap]);
+  }, [selectedDistrict, calendarMap, now]);
 
   const todayRamadan = todayRow?.ramadan || null;
 
@@ -52,16 +58,8 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
     if (!match) return null;
     let hours = parseInt(match[1]);
     if (isPM && hours < 12) hours += 12;
-    const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, parseInt(match[2]), 0);
-  }, []);
-
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+  }, [now]);
 
   const countdowns = useMemo(() => {
     if (!todayRow) return null;
