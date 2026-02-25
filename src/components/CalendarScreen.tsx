@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { DistrictCalendar } from "@/data/boguraCalendar";
-import { Moon, Star } from "lucide-react";
+import { ArrowRight, Moon, Star } from "lucide-react";
 
 interface CalendarScreenProps {
   calendar: DistrictCalendar;
+  onBack?: () => void;
 }
 
-const CalendarScreen = ({ calendar }: CalendarScreenProps) => {
+const CalendarScreen = ({ calendar, onBack }: CalendarScreenProps) => {
   const today = useMemo(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -15,7 +16,16 @@ const CalendarScreen = ({ calendar }: CalendarScreenProps) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="gradient-islamic text-primary-foreground py-6 px-4">
+      <header className="gradient-islamic text-primary-foreground py-6 px-4 relative">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="absolute top-4 left-4 flex items-center gap-1 text-primary-foreground/80 hover:text-primary-foreground text-sm transition-colors"
+          >
+            <ArrowRight size={16} className="rotate-180" />
+            ফিরে যান
+          </button>
+        )}
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <Star size={14} className="text-islamic-gold" fill="currentColor" />
