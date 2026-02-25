@@ -47,7 +47,9 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
   // Countdown timer logic
   const parseTime = useCallback((timeStr: string): Date | null => {
     if (!timeStr) return null;
-    const match = timeStr.match(/(\d+)[.:](\d+)/);
+    // Convert Bengali digits to ASCII
+    const ascii = timeStr.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
+    const match = ascii.match(/(\d+)[.:](\d+)/);
     if (!match) return null;
     const now = new Date();
     const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(match[1]), parseInt(match[2]), 0);
