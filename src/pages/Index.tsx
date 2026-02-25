@@ -89,7 +89,7 @@ const Index = () => {
       {calendar ? (
         <CalendarScreen calendar={calendar} onBack={handleBack} />
       ) : (
-        <HomePage onSelectDistrict={handleSelectDistrict} />
+        <HomePage onSelectDistrict={handleSelectDistrict} calendarMap={calendarMap} />
       )}
     </>
   );
