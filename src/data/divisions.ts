@@ -27,7 +27,7 @@ export const divisions: Division[] = [
   {
     name: "ঢাকা বিভাগ",
     districts: [
-      { name: "ঢাকা", dataKey: "dhaka", available: false },
+      { name: "ঢাকা", dataKey: "dhaka", available: true },
       { name: "গাজীপুর", dataKey: "gazipur", available: false },
       { name: "কিশোরগঞ্জ", dataKey: "kishoreganj", available: false },
       { name: "মানিকগঞ্জ", dataKey: "manikganj", available: false },
@@ -96,14 +96,14 @@ export const divisions: Division[] = [
   {
     name: "রংপুর বিভাগ",
     districts: [
-      { name: "রংপুর", dataKey: "rangpur", available: false },
-      { name: "দিনাজপুর", dataKey: "dinajpur", available: false },
-      { name: "গাইবান্ধা", dataKey: "gaibandha", available: false },
-      { name: "কুড়িগ্রাম", dataKey: "kurigram", available: false },
-      { name: "লালমনিরহাট", dataKey: "lalmonirhat", available: false },
-      { name: "নীলফামারী", dataKey: "nilphamari", available: false },
-      { name: "পঞ্চগড়", dataKey: "panchagarh", available: false },
-      { name: "ঠাকুরগাঁও", dataKey: "thakurgaon", available: false },
+      { name: "রংপুর", dataKey: "rangpur", available: true },
+      { name: "দিনাজপুর", dataKey: "dinajpur", available: true },
+      { name: "গাইবান্ধা", dataKey: "gaibandha", available: true },
+      { name: "কুড়িগ্রাম", dataKey: "kurigram", available: true },
+      { name: "লালমনিরহাট", dataKey: "lalmonirhat", available: true },
+      { name: "নীলফামারী", dataKey: "nilphamari", available: true },
+      { name: "পঞ্চগড়", dataKey: "panchagarh", available: true },
+      { name: "ঠাকুরগাঁও", dataKey: "thakurgaon", available: true },
     ],
   },
   {
