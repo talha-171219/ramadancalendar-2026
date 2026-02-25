@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { divisions } from "@/data/divisions";
-import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise } from "lucide-react";
+import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise, Timer } from "lucide-react";
 
 interface HomePageProps {
   onSelectDistrict: (dataKey: string) => void;
@@ -43,6 +43,50 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
   }, [selectedDistrict, calendarMap]);
 
   const todayRamadan = todayRow?.ramadan || null;
+
+  // Countdown timer logic
+  const parseTime = useCallback((timeStr: string): Date | null => {
+    if (!timeStr) return null;
+    const match = timeStr.match(/(\d+)[.:](\d+)/);
+    if (!match) return null;
+    const now = new Date();
+    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(match[1]), parseInt(match[2]), 0);
+    return target;
+  }, []);
+
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const countdowns = useMemo(() => {
+    if (!todayRow) return null;
+    const sehriTarget = parseTime(todayRow.sehriEnd);
+    const iftarTarget = parseTime(todayRow.iftarTime);
+    
+    const getCountdown = (target: Date | null) => {
+      if (!target) return null;
+      const diff = target.getTime() - now.getTime();
+      if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0, passed: true };
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      return { hours, minutes, seconds, passed: false };
+    };
+
+    return {
+      sehri: getCountdown(sehriTarget),
+      iftar: getCountdown(iftarTarget),
+    };
+  }, [todayRow, now, parseTime]);
+
+  const formatCountdown = (cd: { hours: number; minutes: number; seconds: number; passed: boolean } | null) => {
+    if (!cd) return "--:--:--";
+    if (cd.passed) return "সময় শেষ";
+    return `${String(cd.hours).padStart(2, "0")}:${String(cd.minutes).padStart(2, "0")}:${String(cd.seconds).padStart(2, "0")}`;
+  };
 
   // All available districts for the selector
   const availableDistricts = useMemo(() => {
@@ -155,6 +199,34 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
                 <p className="text-xs text-muted-foreground mt-2">{selectedDistrictInfo.name} জেলা</p>
               </div>
             </div>
+
+            {/* Countdown Timers */}
+            {countdowns && (
+              <div className="grid grid-cols-2 divide-x divide-border border-t border-border">
+                <div className="p-4 text-center bg-card">
+                  <div className="flex items-center justify-center gap-1.5 mb-2">
+                    <Timer size={14} className="text-islamic-green" />
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {countdowns.sehri?.passed ? "সাহরী শেষ" : "সাহরী শেষ হতে বাকি"}
+                    </p>
+                  </div>
+                  <p className={`text-xl font-bold font-mono ${countdowns.sehri?.passed ? "text-muted-foreground" : "text-islamic-green"}`}>
+                    {formatCountdown(countdowns.sehri)}
+                  </p>
+                </div>
+                <div className="p-4 text-center bg-card">
+                  <div className="flex items-center justify-center gap-1.5 mb-2">
+                    <Timer size={14} className="text-islamic-gold" />
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {countdowns.iftar?.passed ? "ইফতার হয়ে গেছে" : "ইফতারের বাকি"}
+                    </p>
+                  </div>
+                  <p className={`text-xl font-bold font-mono ${countdowns.iftar?.passed ? "text-muted-foreground" : "text-islamic-gold"}`}>
+                    {formatCountdown(countdowns.iftar)}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
