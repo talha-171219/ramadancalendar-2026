@@ -11,6 +11,15 @@ import { natoreCalendar } from "@/data/natoreCalendar";
 import { naogaonCalendar } from "@/data/naogaonCalendar";
 import { joypurhatCalendar } from "@/data/joypurhatCalendar";
 import { chapainawabganjCalendar } from "@/data/chapainawabganjCalendar";
+import { dhakaCalendar } from "@/data/dhakaCalendar";
+import { rangpurCalendar2 } from "@/data/rangpurCalendar";
+import { dinajpurCalendar } from "@/data/dinajpurCalendar";
+import { gaibandhaCalendar } from "@/data/gaibandhaCalendar";
+import { kurigramCalendar } from "@/data/kurigramCalendar";
+import { lalmonirhatCalendar } from "@/data/lalmonirhatCalendar";
+import { nilphamariCalendar } from "@/data/nilphamariCalendar";
+import { panchagarhCalendar } from "@/data/panchagarhCalendar";
+import { thakurgaonCalendar } from "@/data/thakurgaonCalendar";
 
 const calendarMap: Record<string, DistrictCalendar> = {
   bogura: boguraCalendar,
@@ -21,6 +30,15 @@ const calendarMap: Record<string, DistrictCalendar> = {
   naogaon: naogaonCalendar,
   joypurhat: joypurhatCalendar,
   chapainawabganj: chapainawabganjCalendar,
+  dhaka: dhakaCalendar,
+  rangpur: rangpurCalendar2,
+  dinajpur: dinajpurCalendar,
+  gaibandha: gaibandhaCalendar,
+  kurigram: kurigramCalendar,
+  lalmonirhat: lalmonirhatCalendar,
+  nilphamari: nilphamariCalendar,
+  panchagarh: panchagarhCalendar,
+  thakurgaon: thakurgaonCalendar,
 };
 
 const Index = () => {
