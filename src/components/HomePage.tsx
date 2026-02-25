@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { divisions } from "@/data/divisions";
-import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise, Timer } from "lucide-react";
+import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise } from "lucide-react";
+import CountdownTimer from "./CountdownTimer";
 
 interface HomePageProps {
   onSelectDistrict: (dataKey: string) => void;
@@ -33,60 +34,16 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
     return null;
   }, [selectedDistrict]);
 
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Get today's row from selected district calendar (uses `now` so it auto-updates at midnight)
+  // Get today's row (only updates when date changes, not every second)
   const todayRow = useMemo(() => {
     if (!selectedDistrict || !calendarMap[selectedDistrict]) return null;
     const cal = calendarMap[selectedDistrict];
+    const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     return cal.rows.find((r: any) => r.gregorianDate === today) || null;
-  }, [selectedDistrict, calendarMap, now]);
+  }, [selectedDistrict, calendarMap]);
 
   const todayRamadan = todayRow?.ramadan || null;
-
-  // Countdown timer logic
-  const parseTime = useCallback((timeStr: string, isPM: boolean = false): Date | null => {
-    if (!timeStr) return null;
-    const ascii = timeStr.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
-    const match = ascii.match(/(\d+)[.:](\d+)/);
-    if (!match) return null;
-    let hours = parseInt(match[1]);
-    if (isPM && hours < 12) hours += 12;
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, parseInt(match[2]), 0);
-  }, [now]);
-
-  const countdowns = useMemo(() => {
-    if (!todayRow) return null;
-    const sehriTarget = parseTime(todayRow.sehriEnd, false);
-    const iftarTarget = parseTime(todayRow.iftarTime, true);
-    
-    const getCountdown = (target: Date | null) => {
-      if (!target) return null;
-      const diff = target.getTime() - now.getTime();
-      if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0, passed: true };
-      const hours = Math.floor(diff / 3600000);
-      const minutes = Math.floor((diff % 3600000) / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-      return { hours, minutes, seconds, passed: false };
-    };
-
-    return {
-      sehri: getCountdown(sehriTarget),
-      iftar: getCountdown(iftarTarget),
-    };
-  }, [todayRow, now, parseTime]);
-
-  const formatCountdown = (cd: { hours: number; minutes: number; seconds: number; passed: boolean } | null) => {
-    if (!cd) return "--:--:--";
-    if (cd.passed) return "সময় শেষ";
-    return `${String(cd.hours).padStart(2, "0")}:${String(cd.minutes).padStart(2, "0")}:${String(cd.seconds).padStart(2, "0")}`;
-  };
 
   // All available districts for the selector
   const availableDistricts = useMemo(() => {
@@ -200,33 +157,8 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
               </div>
             </div>
 
-            {/* Countdown Timers */}
-            {countdowns && (
-              <div className="grid grid-cols-2 divide-x divide-border border-t border-border">
-                <div className="p-4 text-center bg-card">
-                  <div className="flex items-center justify-center gap-1.5 mb-2">
-                    <Timer size={14} className="text-islamic-green" />
-                    <p className="text-xs text-muted-foreground font-medium">
-                      {countdowns.sehri?.passed ? "সাহরী শেষ" : "সাহরী শেষ হতে বাকি"}
-                    </p>
-                  </div>
-                  <p className={`text-xl font-bold font-mono ${countdowns.sehri?.passed ? "text-muted-foreground" : "text-islamic-green"}`}>
-                    {formatCountdown(countdowns.sehri)}
-                  </p>
-                </div>
-                <div className="p-4 text-center bg-card">
-                  <div className="flex items-center justify-center gap-1.5 mb-2">
-                    <Timer size={14} className="text-islamic-gold" />
-                    <p className="text-xs text-muted-foreground font-medium">
-                      {countdowns.iftar?.passed ? "ইফতার হয়ে গেছে" : "ইফতারের বাকি"}
-                    </p>
-                  </div>
-                  <p className={`text-xl font-bold font-mono ${countdowns.iftar?.passed ? "text-muted-foreground" : "text-islamic-gold"}`}>
-                    {formatCountdown(countdowns.iftar)}
-                  </p>
-                </div>
-              </div>
-            )}
+            {/* Countdown Timers - isolated to prevent full page re-renders */}
+            <CountdownTimer sehriEnd={todayRow.sehriEnd} iftarTime={todayRow.iftarTime} />
           </div>
         )}
 
