@@ -66,13 +66,14 @@ const items = [
 
 const OthersPage = () => {
   const [iframeApp, setIframeApp] = useState<{ title: string; url: string } | null>(null);
+  const [iframeLoading, setIframeLoading] = useState(true);
 
   if (iframeApp) {
     return (
       <div className="min-h-screen bg-background flex flex-col pb-24">
         {/* Iframe header */}
         <header className="gradient-islamic text-primary-foreground py-3 px-4 flex items-center gap-3 shrink-0">
-          <button onClick={() => setIframeApp(null)} className="hover:opacity-80 transition-opacity">
+          <button onClick={() => { setIframeApp(null); setIframeLoading(true); }} className="hover:opacity-80 transition-opacity">
             <ArrowLeft size={22} />
           </button>
           <h1 className="text-lg font-bold flex-1">{iframeApp.title}</h1>
@@ -80,13 +81,22 @@ const OthersPage = () => {
             <ExternalLink size={18} />
           </a>
         </header>
-        <iframe
-          src={iframeApp.url}
-          className="flex-1 w-full border-none"
-          title={iframeApp.title}
-          allow="fullscreen"
-          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-        />
+        <div className="flex-1 relative">
+          {iframeLoading && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background z-10">
+              <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+              <p className="text-sm text-muted-foreground animate-pulse">লোড হচ্ছে...</p>
+            </div>
+          )}
+          <iframe
+            src={iframeApp.url}
+            className="absolute inset-0 w-full h-full border-none"
+            title={iframeApp.title}
+            allow="fullscreen"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            onLoad={() => setIframeLoading(false)}
+          />
+        </div>
       </div>
     );
   }
