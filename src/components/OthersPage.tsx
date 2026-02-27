@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Moon, BookOpen, Star, Heart, Info, BookMarked, ArrowLeft, ExternalLink } from "lucide-react";
+import { Moon, BookOpen, Star, Heart, Info, BookMarked, ArrowLeft, ExternalLink, AppWindow } from "lucide-react";
 
 const apps = [
   {
@@ -7,7 +7,7 @@ const apps = [
     title: "দোয়া ও আমল",
     desc: "প্রতিদিনের দোয়া সংকলন",
     icon: BookOpen,
-    url: "", // link পরে দেওয়া হবে
+    url: "https://dailyduas.lovable.app",
     color: "bg-islamic-green/10",
     iconColor: "text-islamic-green",
   },
@@ -16,7 +16,7 @@ const apps = [
     title: "আল কুরআন",
     desc: "পবিত্র কুরআন তিলাওয়াত",
     icon: BookMarked,
-    url: "", // link পরে দেওয়া হবে
+    url: "https://islamhub.lovable.app",
     color: "bg-islamic-gold/15",
     iconColor: "text-islamic-gold",
   },
@@ -25,7 +25,7 @@ const apps = [
     title: "ইসলামিক বই",
     desc: "ইসলামিক বইয়ের সংগ্রহ",
     icon: BookOpen,
-    url: "", // link পরে দেওয়া হবে
+    url: "https://muslim-corner-by-talha.lovable.app/",
     color: "bg-primary/10",
     iconColor: "text-primary",
   },
@@ -140,6 +140,23 @@ const OthersPage = () => {
             })}
           </div>
         </div>
+
+        {/* More Apps Banner */}
+        <a
+          href="https://monirulhasantalha.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-xl border border-primary/20 p-4 text-center transition-all hover:shadow-md hover:scale-[1.01] active:scale-[0.98]"
+        >
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <AppWindow size={18} className="text-primary" />
+            <span className="text-sm font-bold text-foreground">আরো অ্যাপ দেখুন</span>
+            <ExternalLink size={14} className="text-muted-foreground" />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            আমাদের আরও ইসলামিক ও দৈনন্দিন অ্যাপ এক্সপ্লোর করুন
+          </p>
+        </a>
 
         {/* Divider */}
         <div className="flex items-center gap-3">
