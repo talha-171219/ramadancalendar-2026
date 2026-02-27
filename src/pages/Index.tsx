@@ -1,6 +1,11 @@
 import { useState, useCallback } from "react";
 import SplashScreen from "@/components/SplashScreen";
 import HomePage from "@/components/HomePage";
+import BottomNavbar, { type TabId } from "@/components/BottomNavbar";
+import DuaPage from "@/components/DuaPage";
+import TasbihPage from "@/components/TasbihPage";
+import OthersPage from "@/components/OthersPage";
+import SettingsPage from "@/components/SettingsPage";
 import CalendarScreen from "@/components/CalendarScreen";
 import { boguraCalendar } from "@/data/boguraCalendar";
 import type { DistrictCalendar } from "@/data/boguraCalendar";
@@ -126,6 +131,7 @@ const calendarMap: Record<string, DistrictCalendar> = {
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<TabId>("home");
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
@@ -141,14 +147,28 @@ const Index = () => {
 
   const calendar = selectedDistrict ? calendarMap[selectedDistrict] : null;
 
+  const renderTab = () => {
+    switch (activeTab) {
+      case "dua": return <DuaPage />;
+      case "tasbih": return <TasbihPage />;
+      case "others": return <OthersPage />;
+      case "settings": return <SettingsPage />;
+      default:
+        return calendar ? (
+          <CalendarScreen calendar={calendar} onBack={handleBack} />
+        ) : (
+          <HomePage onSelectDistrict={handleSelectDistrict} calendarMap={calendarMap} />
+        );
+    }
+  };
+
   return (
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-      {calendar ? (
-        <CalendarScreen calendar={calendar} onBack={handleBack} />
-      ) : (
-        <HomePage onSelectDistrict={handleSelectDistrict} calendarMap={calendarMap} />
-      )}
+      <div className="pb-20">
+        {renderTab()}
+      </div>
+      {!showSplash && <BottomNavbar activeTab={activeTab} onTabChange={setActiveTab} />}
     </>
   );
 };
