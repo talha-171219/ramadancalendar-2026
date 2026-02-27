@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { CircleDot, RotateCcw, Minus, Plus } from "lucide-react";
+import { CircleDot, RotateCcw, Minus, Plus, Pencil, Check } from "lucide-react";
 
 const presets = [
   { text: "سُبْحَانَ اللَّهِ", bangla: "সুবহানাল্লাহ", meaning: "আল্লাহ পবিত্র", target: 33 },
@@ -15,10 +15,14 @@ const bn = (n: number) => String(n).replace(/[0-9]/g, d => "০১২৩৪৫�
 const TasbihPage = () => {
   const [selected, setSelected] = useState(0);
   const [count, setCount] = useState(0);
+  const [customTargets, setCustomTargets] = useState<Record<number, number>>({});
+  const [editingTarget, setEditingTarget] = useState(false);
+  const [tempTarget, setTempTarget] = useState("");
 
   const preset = presets[selected];
-  const progress = Math.min((count / preset.target) * 100, 100);
-  const completed = count >= preset.target;
+  const currentTarget = customTargets[selected] ?? preset.target;
+  const progress = Math.min((count / currentTarget) * 100, 100);
+  const completed = count >= currentTarget;
 
   const increment = useCallback(() => setCount(c => c + 1), []);
   const decrement = useCallback(() => setCount(c => Math.max(0, c - 1)), []);
@@ -74,9 +78,45 @@ const TasbihPage = () => {
               <span className={`text-5xl font-bold ${completed ? "text-islamic-gold" : "text-foreground"}`}>
                 {bn(count)}
               </span>
-              <span className="text-xs text-muted-foreground mt-1">
-                লক্ষ্য: {bn(preset.target)}
-              </span>
+              <div className="flex items-center gap-1 mt-1">
+                {editingTarget ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const val = parseInt(tempTarget);
+                      if (val > 0) {
+                        setCustomTargets(prev => ({ ...prev, [selected]: val }));
+                      }
+                      setEditingTarget(false);
+                    }}
+                    className="flex items-center gap-1"
+                  >
+                    <input
+                      type="number"
+                      value={tempTarget}
+                      onChange={(e) => setTempTarget(e.target.value)}
+                      className="w-16 text-center text-xs bg-muted rounded-md px-1 py-0.5 outline-none border border-border text-foreground"
+                      autoFocus
+                      min={1}
+                    />
+                    <button type="submit" className="text-islamic-green">
+                      <Check size={14} />
+                    </button>
+                  </form>
+                ) : (
+                  <>
+                    <span className="text-xs text-muted-foreground">
+                      লক্ষ্য: {bn(currentTarget)}
+                    </span>
+                    <button
+                      onClick={() => { setEditingTarget(true); setTempTarget(String(currentTarget)); }}
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Pencil size={12} />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
