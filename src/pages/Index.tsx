@@ -6,6 +6,7 @@ import DuaPage from "@/components/DuaPage";
 import TasbihPage from "@/components/TasbihPage";
 import OthersPage from "@/components/OthersPage";
 import SettingsPage from "@/components/SettingsPage";
+import LocationPrompt from "@/components/LocationPrompt";
 import CalendarScreen from "@/components/CalendarScreen";
 import { boguraCalendar } from "@/data/boguraCalendar";
 import type { DistrictCalendar } from "@/data/boguraCalendar";
@@ -132,9 +133,31 @@ const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("home");
+  const [showLocationPrompt, setShowLocationPrompt] = useState(false);
+  const [autoDetectedDistrict, setAutoDetectedDistrict] = useState<string | null>(null);
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
+
+    // Check if district already saved
+    const savedDistrict = localStorage.getItem("selectedDistrict");
+    if (savedDistrict) {
+      setAutoDetectedDistrict(savedDistrict);
+    } else if (!sessionStorage.getItem("locationPromptDismissed")) {
+      // Show location prompt after a small delay (let install prompt show first)
+      setTimeout(() => {
+        setShowLocationPrompt(true);
+      }, 1500);
+    }
+  }, []);
+
+  const handleLocationDetected = useCallback((districtKey: string) => {
+    setAutoDetectedDistrict(districtKey);
+    setShowLocationPrompt(false);
+  }, []);
+
+  const handleLocationDismiss = useCallback(() => {
+    setShowLocationPrompt(false);
   }, []);
 
   const handleSelectDistrict = useCallback((dataKey: string) => {
@@ -157,7 +180,11 @@ const Index = () => {
         return calendar ? (
           <CalendarScreen calendar={calendar} onBack={handleBack} />
         ) : (
-          <HomePage onSelectDistrict={handleSelectDistrict} calendarMap={calendarMap} />
+          <HomePage
+            onSelectDistrict={handleSelectDistrict}
+            calendarMap={calendarMap}
+            autoDetectedDistrict={autoDetectedDistrict}
+          />
         );
     }
   };
@@ -169,6 +196,12 @@ const Index = () => {
         {renderTab()}
       </div>
       {!showSplash && <BottomNavbar activeTab={activeTab} onTabChange={setActiveTab} />}
+      {showLocationPrompt && (
+        <LocationPrompt
+          onLocationDetected={handleLocationDetected}
+          onDismiss={handleLocationDismiss}
+        />
+      )}
     </>
   );
 };

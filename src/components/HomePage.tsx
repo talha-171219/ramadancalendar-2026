@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { divisions } from "@/data/divisions";
 import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise, Search, X } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
@@ -6,13 +6,22 @@ import CountdownTimer from "./CountdownTimer";
 interface HomePageProps {
   onSelectDistrict: (dataKey: string) => void;
   calendarMap: Record<string, any>;
+  autoDetectedDistrict?: string | null;
 }
 
-const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
+const HomePage = ({ onSelectDistrict, calendarMap, autoDetectedDistrict }: HomePageProps) => {
   const [expandedDivision, setExpandedDivision] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(() => {
     return localStorage.getItem("selectedDistrict");
   });
+
+  // Auto-select district when location is detected
+  useEffect(() => {
+    if (autoDetectedDistrict && calendarMap[autoDetectedDistrict]) {
+      setSelectedDistrict(autoDetectedDistrict);
+      localStorage.setItem("selectedDistrict", autoDetectedDistrict);
+    }
+  }, [autoDetectedDistrict, calendarMap]);
 
   const toggleDivision = (name: string) => {
     setExpandedDivision((prev) => (prev === name ? null : name));
