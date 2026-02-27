@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { divisions } from "@/data/divisions";
-import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise } from "lucide-react";
+import { ChevronDown, ChevronRight, MapPin, Moon, Star, Lock, Clock, Sun, Sunrise, Search, X } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 
 interface HomePageProps {
@@ -59,6 +59,17 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
   }, [calendarMap]);
 
   const [showSelector, setShowSelector] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredDistricts = useMemo(() => {
+    if (!searchQuery.trim()) return availableDistricts;
+    return availableDistricts.filter(
+      (d) =>
+        d.name.includes(searchQuery) ||
+        d.divisionName.includes(searchQuery) ||
+        d.dataKey.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [availableDistricts, searchQuery]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,8 +107,28 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
           </button>
 
           {showSelector && (
-            <div className="border-t border-border max-h-64 overflow-y-auto">
-              {availableDistricts.map((d) => (
+            <div className="border-t border-border max-h-72 overflow-hidden flex flex-col">
+              <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
+                <Search size={16} className="text-muted-foreground shrink-0" />
+                <input
+                  type="text"
+                  placeholder="জেলা খুঁজুন..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground text-foreground"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery("")} className="text-muted-foreground">
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+              <div className="overflow-y-auto max-h-56">
+              {filteredDistricts.length === 0 && (
+                <p className="text-center text-sm text-muted-foreground py-4">কোনো জেলা পাওয়া যায়নি</p>
+              )}
+              {filteredDistricts.map((d) => (
                 <button
                   key={d.dataKey}
                   onClick={() => {
@@ -118,6 +149,7 @@ const HomePage = ({ onSelectDistrict, calendarMap }: HomePageProps) => {
                   )}
                 </button>
               ))}
+              </div>
             </div>
           )}
         </div>
