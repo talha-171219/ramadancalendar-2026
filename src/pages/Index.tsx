@@ -42,6 +42,19 @@ import { jhenaidahCalendar } from "@/data/jhenaidahCalendar";
 import { kushtiaCalendar } from "@/data/kushtiaCalendar";
 import { bagerhatCalendar } from "@/data/bagerhatCalendar";
 import { chuadangaCalendar } from "@/data/chuadangaCalendar";
+import { bholaCalendar } from "@/data/bholaCalendar";
+import { barisalCalendar } from "@/data/barisalCalendar";
+import { bargunaCalendar } from "@/data/bargunaCalendar";
+import { pirojpurCalendar } from "@/data/pirojpurCalendar";
+import { patuakhaliCalendar } from "@/data/patuakhaliCalendar";
+import { jhalokatiCalendar } from "@/data/jhalokatiCalendar";
+import {
+  lakshmipurCalendar, rangamatiCalendar, brahmanbariaCalendar, bandarbanCalendar,
+  feniCalendar, noakhaliCalendar, chandpurCalendar, chittagongCalendar,
+  khagraChariCalendar, comillaCalendar, coxsBazarCalendar,
+  sherpurCalendar, mymensinghCalendar, netrokonaCalendar, jamalpurCalendar,
+  sylhetCalendar, moulvibazarCalendar, habiganjCalendar, sunamganjCalendar,
+} from "@/data/remainingCalendars";
 
 const calendarMap: Record<string, DistrictCalendar> = {
   bogura: boguraCalendar,
@@ -83,6 +96,31 @@ const calendarMap: Record<string, DistrictCalendar> = {
   kushtia: kushtiaCalendar,
   bagerhat: bagerhatCalendar,
   chuadanga: chuadangaCalendar,
+  bhola: bholaCalendar,
+  barisal: barisalCalendar,
+  barguna: bargunaCalendar,
+  pirojpur: pirojpurCalendar,
+  patuakhali: patuakhaliCalendar,
+  jhalokati: jhalokatiCalendar,
+  lakshmipur: lakshmipurCalendar,
+  rangamati: rangamatiCalendar,
+  brahmanbaria: brahmanbariaCalendar,
+  bandarban: bandarbanCalendar,
+  feni: feniCalendar,
+  noakhali: noakhaliCalendar,
+  chandpur: chandpurCalendar,
+  chittagong: chittagongCalendar,
+  khagrachari: khagraChariCalendar,
+  comilla: comillaCalendar,
+  coxsbazar: coxsBazarCalendar,
+  sherpur: sherpurCalendar,
+  mymensingh: mymensinghCalendar,
+  netrokona: netrokonaCalendar,
+  jamalpur: jamalpurCalendar,
+  sylhet: sylhetCalendar,
+  moulvibazar: moulvibazarCalendar,
+  habiganj: habiganjCalendar,
+  sunamganj: sunamganjCalendar,
 };
 
 const Index = () => {
