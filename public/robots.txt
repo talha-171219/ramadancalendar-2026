@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://ramadancalendar-2026.lovable.app/sitemap.xml
+Sitemap: https://ramadancalendar2026.vercel.app/sitemap.xml
