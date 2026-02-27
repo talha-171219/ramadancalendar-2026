@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Download, X } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -6,46 +6,73 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+// Store the deferred prompt globally so it survives re-renders
+let globalDeferredPrompt: BeforeInstallPromptEvent | null = null;
+
 const InstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [show, setShow] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
-    // Don't show if already dismissed this session
-    if (sessionStorage.getItem("installDismissed")) return;
+    // If already installed, never show
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setInstalled(true);
+      return;
+    }
+
+    // If user already accepted install, don't show
+    if (localStorage.getItem("appInstalled") === "true") {
+      setInstalled(true);
+      return;
+    }
 
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShow(true);
+      globalDeferredPrompt = e as BeforeInstallPromptEvent;
+      setDeferredPrompt(globalDeferredPrompt);
+
+      // Check if dismissed this session — if not, show prompt
+      if (!sessionStorage.getItem("installDismissedThisSession")) {
+        setShow(true);
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handler);
+
+    // If we already have a cached prompt from a previous render
+    if (globalDeferredPrompt && !sessionStorage.getItem("installDismissedThisSession")) {
+      setDeferredPrompt(globalDeferredPrompt);
+      setShow(true);
+    }
+
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  const handleInstall = async () => {
+  const handleInstall = useCallback(async () => {
     if (!deferredPrompt) return;
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
-      setShow(false);
+      localStorage.setItem("appInstalled", "true");
+      setInstalled(true);
     }
-    setDeferredPrompt(null);
-  };
-
-  const handleDismiss = () => {
     setShow(false);
-    setDismissed(true);
-    sessionStorage.setItem("installDismissed", "true");
-  };
+    globalDeferredPrompt = null;
+    setDeferredPrompt(null);
+  }, [deferredPrompt]);
 
-  if (!show || dismissed) return null;
+  const handleDismiss = useCallback(() => {
+    setShow(false);
+    // Only dismiss for this session — next time they open the app, prompt shows again
+    sessionStorage.setItem("installDismissedThisSession", "true");
+  }, []);
+
+  if (!show || installed) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-card border border-border rounded-t-2xl sm:rounded-2xl w-full max-w-md mx-auto p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="relative bg-card border border-border rounded-t-2xl sm:rounded-2xl w-full max-w-md mx-auto p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
         {/* Close button */}
         <button
           onClick={handleDismiss}
