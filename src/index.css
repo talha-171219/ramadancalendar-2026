@@ -106,6 +106,16 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Noto Sans Bengali', sans-serif;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
