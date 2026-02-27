@@ -87,7 +87,7 @@ const HomePage = ({ onSelectDistrict, calendarMap, autoDetectedDistrict }: HomeP
         <div className="max-w-2xl mx-auto text-center">
           <Moon size={40} className="text-islamic-gold mx-auto mb-3" fill="currentColor" />
           <h1 className="text-3xl md:text-4xl font-bold mb-1">রমযান ক্যালেন্ডার ১৪৪৭</h1>
-          <p className="text-sm opacity-80">ইসলামিক ফাউন্ডেশন বাংলাদেশ</p>
+          
           <p className="text-xs opacity-60 mt-1">পবিত্র মাহে রমযান ১৪৪৭ হিজরী, ২০২৬ খ্রিষ্টাব্দ</p>
           <div className="mt-4 w-32 h-0.5 gradient-gold rounded-full mx-auto" />
         </div>

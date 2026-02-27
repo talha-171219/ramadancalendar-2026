@@ -75,32 +75,12 @@ const SettingsPage = () => {
             </div>
             <div className="pl-[52px] space-y-2 text-xs text-muted-foreground">
               <p>রমযান ক্যালেন্ডার ১৪৪৭ হিজরী</p>
-              <p>ইসলামিক ফাউন্ডেশন বাংলাদেশ এর তথ্য অনুযায়ী তৈরি</p>
+              
               <p>সকল ৬৪ জেলার সাহরী ও ইফতারের সময়সূচি</p>
             </div>
           </div>
         </div>
 
-        {/* Source */}
-        <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-          <a
-            href="https://www.islamicfoundation.gov.bd"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between px-4 py-4 hover:bg-muted/50 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-islamic-green/10 flex items-center justify-center">
-                <Globe size={18} className="text-islamic-green" />
-              </div>
-              <div>
-                <p className="font-semibold text-sm text-foreground">ইসলামিক ফাউন্ডেশন</p>
-                <p className="text-xs text-muted-foreground">অফিসিয়াল ওয়েবসাইট</p>
-              </div>
-            </div>
-            <ExternalLink size={16} className="text-muted-foreground" />
-          </a>
-        </div>
       </main>
     </div>
   );

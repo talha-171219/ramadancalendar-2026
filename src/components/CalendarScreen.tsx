@@ -108,9 +108,6 @@ const CalendarScreen = ({ calendar, onBack }: CalendarScreenProps) => {
           ))}
         </section>
 
-        <footer className="text-center py-6 text-xs text-muted-foreground">
-          রমযান ক্যালেন্ডার ১৪৪৭ — ইসলামিক ফাউন্ডেশন বাংলাদেশ
-        </footer>
       </main>
     </div>
   );

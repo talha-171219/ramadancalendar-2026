@@ -56,9 +56,6 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
       <h2 className="text-2xl md:text-3xl font-semibold text-islamic-gold mb-2">
         ১৪৪৭ হিজরী
       </h2>
-      <p className="text-primary-foreground/70 text-lg mt-2">
-        ইসলামিক ফাউন্ডেশন বাংলাদেশ
-      </p>
 
       {/* Divider */}
       <div className="mt-8 w-48 h-0.5 gradient-gold rounded-full" />
