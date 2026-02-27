@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -40,12 +40,12 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         ))}
       </div>
 
-      {/* Moon */}
+      {/* App Icon */}
       <div className="relative mb-8 animate-bounce" style={{ animationDuration: "3s" }}>
-        <Moon
-          size={80}
-          className="text-islamic-gold drop-shadow-lg"
-          fill="currentColor"
+        <img
+          src="/icon-192.png"
+          alt="রমযান ক্যালেন্ডার"
+          className="w-24 h-24 md:w-28 md:h-28 drop-shadow-lg rounded-2xl"
         />
       </div>
 
