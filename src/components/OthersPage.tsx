@@ -64,16 +64,31 @@ const items = [
   },
 ];
 
-const OthersPage = () => {
+interface OthersPageProps {
+  onIframeChange?: (isOpen: boolean) => void;
+}
+
+const OthersPage = ({ onIframeChange }: OthersPageProps) => {
   const [iframeApp, setIframeApp] = useState<{ title: string; url: string } | null>(null);
   const [iframeLoading, setIframeLoading] = useState(true);
 
+  const openIframe = (app: { title: string; url: string }) => {
+    setIframeApp(app);
+    setIframeLoading(true);
+    onIframeChange?.(true);
+  };
+
+  const closeIframe = () => {
+    setIframeApp(null);
+    setIframeLoading(true);
+    onIframeChange?.(false);
+  };
+
   if (iframeApp) {
     return (
-      <div className="min-h-screen bg-background flex flex-col pb-24">
-        {/* Iframe header */}
+      <div className="fixed inset-0 bg-background flex flex-col z-50">
         <header className="gradient-islamic text-primary-foreground py-3 px-4 flex items-center gap-3 shrink-0">
-          <button onClick={() => { setIframeApp(null); setIframeLoading(true); }} className="hover:opacity-80 transition-opacity">
+          <button onClick={closeIframe} className="hover:opacity-80 transition-opacity">
             <ArrowLeft size={22} />
           </button>
           <h1 className="text-lg font-bold flex-1">{iframeApp.title}</h1>
@@ -127,7 +142,7 @@ const OthersPage = () => {
                   key={app.id}
                   onClick={() => {
                     if (hasUrl) {
-                      setIframeApp({ title: app.title, url: app.url });
+                      openIframe({ title: app.title, url: app.url });
                     }
                   }}
                   className={`bg-card rounded-xl border border-border shadow-sm p-4 flex flex-col items-center gap-2 transition-all ${

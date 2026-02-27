@@ -135,16 +135,14 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState<TabId>("home");
   const [showLocationPrompt, setShowLocationPrompt] = useState(false);
   const [autoDetectedDistrict, setAutoDetectedDistrict] = useState<string | null>(null);
+  const [iframeOpen, setIframeOpen] = useState(false);
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
-
-    // Check if district already saved
     const savedDistrict = localStorage.getItem("selectedDistrict");
     if (savedDistrict) {
       setAutoDetectedDistrict(savedDistrict);
     } else if (!sessionStorage.getItem("locationPromptDismissed")) {
-      // Show location prompt after a small delay (let install prompt show first)
       setTimeout(() => {
         setShowLocationPrompt(true);
       }, 1500);
@@ -174,7 +172,7 @@ const Index = () => {
     switch (activeTab) {
       case "dua": return <DuaPage />;
       case "tasbih": return <TasbihPage />;
-      case "others": return <OthersPage />;
+      case "others": return <OthersPage onIframeChange={setIframeOpen} />;
       case "settings": return <SettingsPage />;
       default:
         return calendar ? (
@@ -192,10 +190,10 @@ const Index = () => {
   return (
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-      <div className="pb-20">
+      <div className={iframeOpen ? "" : "pb-20"}>
         {renderTab()}
       </div>
-      {!showSplash && <BottomNavbar activeTab={activeTab} onTabChange={setActiveTab} />}
+      {!showSplash && !iframeOpen && <BottomNavbar activeTab={activeTab} onTabChange={setActiveTab} />}
       {showLocationPrompt && (
         <LocationPrompt
           onLocationDetected={handleLocationDetected}
