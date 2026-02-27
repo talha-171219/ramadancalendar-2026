@@ -32,6 +32,16 @@ import { manikganjCalendar } from "@/data/manikganjCalendar";
 import { munshiganjCalendar } from "@/data/munshiganjCalendar";
 import { rajbariCalendar } from "@/data/rajbariCalendar";
 import { shariatpurCalendar } from "@/data/shariatpurCalendar";
+import { satkhiraCalendar } from "@/data/satkhiraCalendar";
+import { jessoreCalendar } from "@/data/jessoreCalendar";
+import { meherpurCalendar } from "@/data/meherpurCalendar";
+import { maguraCalendar } from "@/data/maguraCalendar";
+import { khulnaCalendar } from "@/data/khulnaCalendar";
+import { narailCalendar } from "@/data/narailCalendar";
+import { jhenaidahCalendar } from "@/data/jhenaidahCalendar";
+import { kushtiaCalendar } from "@/data/kushtiaCalendar";
+import { bagerhatCalendar } from "@/data/bagerhatCalendar";
+import { chuadangaCalendar } from "@/data/chuadangaCalendar";
 
 const calendarMap: Record<string, DistrictCalendar> = {
   bogura: boguraCalendar,
@@ -63,6 +73,16 @@ const calendarMap: Record<string, DistrictCalendar> = {
   munshiganj: munshiganjCalendar,
   rajbari: rajbariCalendar,
   shariatpur: shariatpurCalendar,
+  satkhira: satkhiraCalendar,
+  jessore: jessoreCalendar,
+  meherpur: meherpurCalendar,
+  magura: maguraCalendar,
+  khulna: khulnaCalendar,
+  narail: narailCalendar,
+  jhenaidah: jhenaidahCalendar,
+  kushtia: kushtiaCalendar,
+  bagerhat: bagerhatCalendar,
+  chuadanga: chuadangaCalendar,
 };
 
 const Index = () => {
